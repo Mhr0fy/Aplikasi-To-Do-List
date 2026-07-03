@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>To-Do List Modern</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <div class="brand-mark"><i class="fa-solid fa-list-check"></i></div>
+          <div>
+            <p class="brand-label">FocusFlow</p>
+            <p class="brand-sub">Perencana harian</p>
+          </div>
+        </div>
+
+        <nav class="side-nav">
+          <button class="nav-item active" data-view="overview" type="button"><i class="fa-solid fa-house"></i> Ringkasan</button>
+          <button class="nav-item" data-view="agenda" type="button"><i class="fa-solid fa-calendar-day"></i> Agenda</button>
+          <button class="nav-item" data-view="settings" type="button"><i class="fa-solid fa-gear"></i> Pengaturan</button>
+        </nav>
+
+        <div class="side-card">
+          <p class="side-card-title">Fokus Hari Ini</p>
+          <p class="side-card-text">Jaga prioritas teratas Anda tetap terlihat dan bergerak maju dengan jelas.</p>
+        </div>
+      </aside>
+
+      <main class="main-panel">
+        <header class="hero-card">
+          <div>
+            <p class="eyebrow">Produktivitas Minimal</p>
+            <h1>Rencanakan hari Anda dengan fokus yang tenang.</h1>
+            <p class="hero-text">
+              Ruang kerja yang bersih untuk prioritas, deadline, dan momentum Anda.
+            </p>
+          </div>
+          <button id="themeToggle" class="theme-toggle" type="button">
+            <i class="fa-solid fa-moon"></i>
+            Mode Gelap
+          </button>
+        </header>
+
+        <section class="stats-grid" aria-label="Statistik tugas">
+          <div class="stat-card">
+            <span id="totalTasks" class="stat-value">0</span>
+            <p>Total Tugas</p>
+          </div>
+          <div class="stat-card">
+            <span id="completedTasks" class="stat-value">0</span>
+            <p>Tugas Selesai</p>
+          </div>
+          <div class="stat-card">
+            <span id="pendingTasks" class="stat-value">0</span>
+            <p>Tugas Belum Selesai</p>
+          </div>
+        </section>
+
+        <section class="dashboard-grid">
+          <div class="panel large-panel">
+            <div id="viewOverview" class="view-panel active-view">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-label">Fokus Hari Ini</p>
+                  <h2>Catat hal yang paling penting hari ini</h2>
+                </div>
+                <div class="progress-pill">
+                  <div class="progress-pill-text"><span id="progressPercent">0%</span> selesai</div>
+                  <div class="progress-track" aria-hidden="true">
+                    <div id="progressBar" class="progress-bar"></div>
+                  </div>
+                </div>
+              </div>
+
+              <form id="todoForm" class="todo-form">
+              <label class="sr-only" for="todoInput">Masukkan tugas baru</label>
+              <input
+                id="todoInput"
+                name="todoInput"
+                type="text"
+                placeholder="Contoh: Belajar JavaScript"
+                autocomplete="off"
+              />
+
+              <label class="sr-only" for="prioritySelect">Pilih prioritas</label>
+              <select id="prioritySelect" name="prioritySelect">
+                <option value="tinggi">🔴 Tinggi</option>
+                <option value="sedang">🟡 Sedang</option>
+                <option value="rendah">🟢 Rendah</option>
+              </select>
+
+
+              <label class="sr-only" for="deadlineInput">Pilih deadline</label>
+              <input id="deadlineInput" name="deadlineInput" type="date" />
+
+              <button type="submit" class="primary-btn">
+                <i class="fa-solid fa-plus"></i>
+                Tambah
+              </button>
+            </form>
+
+              <p id="message" class="message" aria-live="polite"></p>
+
+              <div class="toolbar">
+                <div class="search-box">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <input
+                    id="searchInput"
+                    type="text"
+                    placeholder="Cari tugas..."
+                    autocomplete="off"
+                  />
+                </div>
+
+                <div class="filter-group" role="group" aria-label="Filter tugas">
+                  <button class="filter-btn active" data-filter="all" type="button">Semua</button>
+                  <button class="filter-btn" data-filter="pending" type="button">Belum Selesai</button>
+                  <button class="filter-btn" data-filter="completed" type="button">Selesai</button>
+                </div>
+              </div>
+
+              <div class="action-row">
+                <button id="clearCompletedBtn" class="secondary-btn" type="button">
+                  <i class="fa-solid fa-trash-can"></i>
+                  Hapus Tugas Selesai
+                </button>
+                <button id="clearAllBtn" class="danger-btn" type="button">
+                  <i class="fa-solid fa-broom"></i>
+                  Hapus Semua
+                </button>
+              </div>
+
+              <div id="todoList" class="todo-list" aria-live="polite"></div>
+            </div>
+
+            <div id="viewAgenda" class="view-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-label">Agenda</p>
+                  <h2>Jadwal dan rapat penting</h2>
+                </div>
+              </div>
+              <form id="agendaForm" class="agenda-form">
+                <label class="sr-only" for="agendaInput">Tambah agenda</label>
+                <input id="agendaInput" type="text" placeholder="Judul agenda" autocomplete="off" />
+                <label class="sr-only" for="agendaDateInput">Tanggal agenda</label>
+                <input id="agendaDateInput" type="date" />
+                <button type="submit" class="primary-btn">
+                  <i class="fa-solid fa-plus"></i>
+                  Tambah Agenda
+                </button>
+              </form>
+              <div id="agendaList" class="agenda-list"></div>
+            </div>
+
+
+            <div id="viewSettings" class="view-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="section-label">Pengaturan</p>
+                  <h2>Sesuaikan pengalaman Anda</h2>
+                </div>
+              </div>
+              <div class="settings-list">
+                <div class="setting-item">
+                  <span>Notifikasi tugas</span>
+                  <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                </div>
+                <div class="setting-item">
+                  <span>Mode fokus</span>
+                  <label class="switch"><input type="checkbox" /><span class="slider"></span></label>
+                </div>
+                <div class="setting-item">
+                  <span>Urutkan berdasarkan deadline</span>
+                  <label class="switch"><input type="checkbox" checked /><span class="slider"></span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="side-stack">
+            <section class="panel compact-panel">
+              <div class="panel-heading panel-heading-small">
+                <div>
+                  <p class="section-label">Mendatang</p>
+                  <h3>Deadline berikutnya</h3>
+                </div>
+              </div>
+              <div class="mini-list" id="upcomingDeadlines">
+              </div>
+            </section>
+
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <div id="editModal" class="modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="editModalTitle">
+        <div class="modal-header">
+          <h3 id="editModalTitle">Edit Tugas</h3>
+          <button id="closeEditModalBtn" class="icon-btn" type="button" aria-label="Tutup edit tugas">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="editTodoForm" class="edit-form">
+          <label class="sr-only" for="editTodoInput">Edit tugas</label>
+          <input id="editTodoInput" name="editTodoInput" type="text" placeholder="Tulis tugas baru" autocomplete="off" />
+
+          <label class="sr-only" for="editPrioritySelect">Edit prioritas</label>
+          <select id="editPrioritySelect" name="editPrioritySelect">
+            <option value="tinggi">🔴 Tinggi</option>
+            <option value="sedang">🟡 Sedang</option>
+            <option value="rendah">🟢 Rendah</option>
+          </select>
+
+          <label class="sr-only" for="editDeadlineInput">Edit deadline</label>
+          <input id="editDeadlineInput" name="editDeadlineInput" type="date" />
+
+          <div class="modal-actions">
+            <button id="cancelEditBtn" class="secondary-btn" type="button">Batal</button>
+            <button type="submit" class="primary-btn">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="agendaEditModal" class="modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="agendaEditModalTitle">
+        <div class="modal-header">
+          <h3 id="agendaEditModalTitle">Edit Agenda</h3>
+          <button id="closeAgendaEditModalBtn" class="icon-btn" type="button" aria-label="Tutup edit agenda">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form id="editAgendaForm" class="edit-form">
+          <label class="sr-only" for="editAgendaTitleInput">Edit judul agenda</label>
+          <input id="editAgendaTitleInput" name="editAgendaTitleInput" type="text" placeholder="Judul agenda" autocomplete="off" />
+
+          <label class="sr-only" for="editAgendaDateInput">Edit tanggal agenda</label>
+          <input id="editAgendaDateInput" name="editAgendaDateInput" type="date" />
+
+          <div class="modal-actions">
+            <button id="cancelAgendaEditBtn" class="secondary-btn" type="button">Batal</button>
+            <button type="submit" class="primary-btn">Simpan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="deleteModal" class="modal" aria-hidden="true">
+      <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="modal-header">
+          <h3 id="deleteModalTitle">Hapus Item</h3>
+          <button id="closeDeleteModalBtn" class="icon-btn" type="button" aria-label="Tutup konfirmasi hapus">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <p id="deleteModalMessage" class="modal-message"></p>
+
+        <div class="modal-actions">
+          <button id="cancelDeleteBtn" class="secondary-btn" type="button">Batal</button>
+          <button id="confirmDeleteBtn" class="danger-btn" type="button">Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
